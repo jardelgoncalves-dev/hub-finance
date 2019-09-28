@@ -136,8 +136,7 @@ export default class IncomeController {
 
   static async findByYearAndMonth (req, res) {
     try {
-      const { year } = req.params
-      const { month } = req.params
+      const { year, month } = req.params
       const user_id = req.userId
   
       const validator = new Validator({
