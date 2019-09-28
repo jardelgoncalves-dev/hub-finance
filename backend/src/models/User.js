@@ -1,6 +1,6 @@
 import { Model } from 'objection';
 import bcrypt from 'bcryptjs'
-import Income from './Income'
+import CashFlow from './CashFlow'
 
 import UserQueryBuilder from '../database/queries/UserQueryBuilder'
 
@@ -29,10 +29,10 @@ export default class User extends Model {
     return {
       owner: {
         relation: Model.HasManyRelation,
-        modelClass: Income,
+        modelClass: CashFlow,
         join: {
           from: 'users.id',
-          to: 'incomes.user_id'
+          to: 'cash_flows.user_id'
         }
       }
     }
