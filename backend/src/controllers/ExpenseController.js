@@ -107,4 +107,30 @@ export default class ExpenseController {
       return res.status(501).json({ error: { message: 'Ocorreu um erro ao remover a despesa' } })
     }
   }
+
+  static async totalByYear (req, res) {
+    try {
+      const { year } = req.params
+      const user_id = req.userId
+  
+      const validator = new Validator({
+        'year.required': year,
+        'year.year': year,
+      })
+  
+      if(validator.hasError()) return res.status(400).json({ error: validator.errors })
+  
+      const expenses = await CashFlow.query()
+                                     .select('month')
+                                     .sum({ total: 'value' })
+                                     .where({ user_id })
+                                     .where('flow_type', 'expense')
+                                     .whereRaw('EXTRACT(year FROM date) = ?', year)
+                                     .orderByRaw('EXTRACT(month FROM date) ASC')
+                                     .groupBy('month', 'date')
+      return res.status(200).json(expenses)
+    } catch (err) {
+      return res.status(501).json({ error: { message: 'Ocorreu um erro ao buscar as despesa por periodo' } })
+    }
+  }
 }
