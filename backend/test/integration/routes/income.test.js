@@ -247,4 +247,58 @@ describe('Routes Income', () => {
         })
     })
   })
+
+  describe('Route GET /incomes/total/:year/year', () => {
+    
+    it('should return an error if year is invalid', done => {
+      request
+        .get('/incomes/total/nao_sou_valido/year')
+        .set('authorization', `Bearer ${ token } `)
+        .end((err, res) => {
+          expect(res.body.error.year).to.be.an('array')
+          expect(res.status).to.be.eql(400)
+          done(err)
+        })
+    })
+
+    // SQLITE does not work
+
+    // it('should return a list of total income per month in a given year', done => {
+    //   request
+    //     .get('/incomes/total/2019/year')
+    //     .set('authorization', `Bearer ${ token } `)
+    //     .end((err, res) => {
+    //       expect(res.status).to.be.eql(200)
+    //       expect(res.body).to.be.an('array')
+    //       done(err)
+    //     })
+    // })
+  })
+
+  describe('Route GET /incomes/total/:year/year', () => {
+    
+    it('should return an error if year or month is invalid', done => {
+      request
+        .get('/incomes/20000/08/period')
+        .set('authorization', `Bearer ${ token } `)
+        .end((err, res) => {
+          expect(res.body.error.year).to.be.an('array')
+          expect(res.status).to.be.eql(400)
+          done(err)
+        })
+    })
+
+    // SQLITE does not work
+
+    // it('should return a list of total incomes per year and month', done => {
+    //   request
+    //     .get('/incomes/2000/08/period')
+    //     .set('authorization', `Bearer ${ token } `)
+    //     .end((err, res) => {
+    //       expect(res.status).to.be.eql(200)
+    //       expect(res.body).to.be.an('array')
+    //       done(err)
+    //     })
+    // })
+  })
 })
