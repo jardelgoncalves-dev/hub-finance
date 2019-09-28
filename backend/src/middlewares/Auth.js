@@ -9,7 +9,7 @@ dotenv.config({
 })
 
 export default async (req, res, next) => {
-  const authHeader = req.headers.authentication
+  const authHeader = req.headers.authorization
   if (!authHeader) return res.status(401).json({ error: 'Token não fornecido!' })
   try{
     const [, token] = authHeader.split(' ')
