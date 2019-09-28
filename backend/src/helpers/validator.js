@@ -18,6 +18,12 @@ export default class Validator {
     }
   }
 
+  year (variable, key, message) {
+    const regex = /[0-9]{4}/
+    if (variable === undefined || !regex.test(variable) || String(variable).length > 4 ) {
+      this._pushMessageErrorArray(key, message, 'Ano inválido!')
+    }
+  }
 
   number (variable, key, message) {
     if (isNaN(variable)) {
