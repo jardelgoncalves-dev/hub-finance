@@ -1,14 +1,9 @@
 import { Model } from 'objection';
-import User from './User'
+import CashFlow from '../models/CashFlow'
 
-export default class Income extends Model {
+export default class Category extends Model {
   static get tableName() {
     return 'categories';
-  }
-
-  $beforeInsert() {
-    this.created_at = new Date().toISOString();
-    this.updated_at = new Date().toISOString();
   }
 
   static get jsonSchema () {
@@ -19,20 +14,19 @@ export default class Income extends Model {
       properties: {
         id: { type: 'integer' },
         name: { type: 'string', minLength: 1, maxLength: 255 },
-        income: { type: 'boolean' },
-        expense: { type: 'boolean'},
+        flow_type: { type: 'string' },
       }
     }
   }
 
   static get relationMappings () {
     return {
-      owner: {
+      cash_flows: {
         relation: Model.BelongsToOneRelation,
-        modelClass: User,
+        modelClass: CashFlow,
         join: {
-          from: 'profits.user_id',
-          to: 'users.id'
+          from: 'categories.id',
+          to: 'cash_flows.category_id'
         }
       }
     }
