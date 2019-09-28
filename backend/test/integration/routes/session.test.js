@@ -1,6 +1,6 @@
 import User from '../../../src/models/User'
 
-describe('Routes Users', () => {
+describe('Routes Session', () => {
 
   const userDefault = {
     name: 'User Test',
