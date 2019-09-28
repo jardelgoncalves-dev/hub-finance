@@ -4,6 +4,7 @@ import UserController from './controllers/UserController'
 import SessionController from './controllers/SessionController'
 import IncomeController from './controllers/IncomeController'
 import ExpenseController from './controllers/ExpenseController'
+import CategoryController from './controllers/CategoryController'
 
 import AuthMiddleware from './middlewares/Auth'
 
@@ -11,6 +12,7 @@ const routes = express.Router()
 
 routes.post('/users', UserController.store)
 routes.post('/session', SessionController.store)
+routes.get('/categories', CategoryController.index)
 
 routes.use(AuthMiddleware)
 
