@@ -1,6 +1,12 @@
 import User from '../models/User'
-import Validator from '../helpers/validator'
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+
+import Validator from '../helpers/validator'
+
+dotenv.config({
+  path: '.env'
+})
 
 export default class UserController {
   static async store (req, res) {
@@ -19,7 +25,7 @@ export default class UserController {
       if (checkEmail.length) return res.status(400).json({ error: { email: ['Este email já está sendo usado!'] } })
   
       const user = await User.query().insert({ name, email, password })
-      const token = jwt.sign(user.id, "test")
+      const token = jwt.sign({ id: user.id }, process.env.APP_SECRET)
   
       return res.status(201).json({ token })
     } catch (err) {

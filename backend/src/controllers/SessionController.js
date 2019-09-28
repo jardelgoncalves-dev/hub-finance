@@ -1,9 +1,13 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
+import dotenv from 'dotenv'
 
 import User from '../models/User'
 import Validator from '../helpers/validator'
 
+dotenv.config({
+  path: '.env'
+})
 
 export default class SessionController {
   static async store (req, res) {
@@ -24,7 +28,7 @@ export default class SessionController {
         return res.status(400).json({ error: { message: 'Email ou password inválido!' } })
       }
 
-      const token = jwt.sign(user[0].id, "test")
+      const token = jwt.sign({ id: user[0].id }, process.env.APP_SECRET)
       return res.status(200).json({ token })
 
     } catch (err) {
