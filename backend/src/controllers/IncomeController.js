@@ -133,5 +133,31 @@ export default class IncomeController {
       return res.status(501).json({ error: { message: 'Ocorreu um erro ao buscar as despesa por periodo' } })
     }
   }
+
+  static async findByYearAndMonth (req, res) {
+    try {
+      const { year } = req.params
+      const { month } = req.params
+      const user_id = req.userId
   
+      const validator = new Validator({
+        'year.required': year,
+        'year.year': year,
+        'month.required': month,
+      })
+  
+      if(validator.hasError()) return res.status(400).json({ error: validator.errors })
+  
+      const incomes = await CashFlow.query()
+                                     .where({ user_id })
+                                     .where('flow_type', 'income')
+                                     .whereRaw('EXTRACT(year FROM date) = ?', year)
+                                     .whereRaw('EXTRACT(month FROM date) = ?', month)
+                                     .orderBy('id', 'DESC')
+                                     .eager('categories')
+      return res.status(200).json(incomes)
+    } catch (err) {
+      return res.status(501).json({ error: { message: 'Ocorreu um erro ao buscar as despesa por periodo' } })
+    }
+  }
 }
