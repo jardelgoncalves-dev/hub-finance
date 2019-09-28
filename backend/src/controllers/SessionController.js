@@ -33,7 +33,3 @@ export default class SessionController {
     }
   }
 }
-
-function passwordValid(password, password_hash) {
-  return bcrypt.compareSync(password, password_hash)
-}
