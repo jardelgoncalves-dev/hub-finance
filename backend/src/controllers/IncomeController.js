@@ -104,7 +104,7 @@ export default class IncomeController {
       if (!result) return res.status(404).send({ error: 'Receita não encontrada' })
 
     } catch (err) {
-      return res.status(501).json({ error: { message: 'Ocorreu um erro ao atualizar a receita' } })
+      return res.status(501).json({ error: { message: 'Ocorreu um erro ao remover a receita' } })
     }
   }
 }

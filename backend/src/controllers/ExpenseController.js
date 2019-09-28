@@ -9,7 +9,7 @@ export default class ExpenseController {
                               .where('flow_type', 'expense')
       return res.status(200).json(expenses)
     } catch (err) {
-      return res.status(501).json({ message: 'Ocorreu um erro ao buscar as receitas' })
+      return res.status(501).json({ message: 'Ocorreu um erro ao buscar as despesas' })
     }
   }
 
@@ -21,7 +21,7 @@ export default class ExpenseController {
                                     .where('flow_type', 'expense')
       return res.status(200).json(expense || {})
     } catch (err) {
-      return res.status(501).json({ message: 'Ocorreu um erro ao buscar uma receita' })
+      return res.status(501).json({ message: 'Ocorreu um erro ao buscar uma despesa' })
     }
   }
 
@@ -52,7 +52,7 @@ export default class ExpenseController {
       return res.status(201).json(expense)
 
     } catch (err) {
-      return res.status(501).json({ error: { message: 'Ocorreu um erro ao cadastrar a receita' } })
+      return res.status(501).json({ error: { message: 'Ocorreu um erro ao cadastrar a despesa' } })
     }
   }
 
@@ -86,7 +86,7 @@ export default class ExpenseController {
       return res.status(200).json(expenseUpdated)
 
     } catch (err) {
-      return res.status(501).json({ error: { message: 'Ocorreu um erro ao atualizar a receita' } })
+      return res.status(501).json({ error: { message: 'Ocorreu um erro ao atualizar a despesa' } })
     }
   }
 
@@ -104,7 +104,7 @@ export default class ExpenseController {
       if (!result) return res.status(404).send({ error: 'Receita não encontrada' })
 
     } catch (err) {
-      return res.status(501).json({ error: { message: 'Ocorreu um erro ao atualizar a receita' } })
+      return res.status(501).json({ error: { message: 'Ocorreu um erro ao remover a despesa' } })
     }
   }
 }
