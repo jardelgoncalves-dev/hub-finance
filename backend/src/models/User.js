@@ -1,5 +1,6 @@
 import { Model } from 'objection';
 import bcrypt from 'bcryptjs'
+import Income from './Income'
 
 import UserQueryBuilder from '../database/queries/UserQueryBuilder'
 
@@ -22,6 +23,19 @@ export default class User extends Model {
 
   $beforeUpdate() {
     this.updated_at = new Date().toISOString();
+  }
+
+  static get relationMappings () {
+    return {
+      owner: {
+        relation: Model.HasManyRelation,
+        modelClass: Income,
+        join: {
+          from: 'users.id',
+          to: 'incomes.user_id'
+        }
+      }
+    }
   }
 
   static get jsonSchema () {
