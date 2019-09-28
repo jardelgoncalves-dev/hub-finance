@@ -1,13 +1,13 @@
 import CashFlow from '../models/CashFlow'
 import Validator from '../helpers/validator'
 
-export default class IncomeController {
+export default class ExpenseController {
   static async index (req, res) {
     try {
-      const incomes = await CashFlow.query()
+      const expenses = await CashFlow.query()
                               .where('user_id', req.userId)
-                              .where('flow_type', 'income')
-      return res.status(200).json(incomes)
+                              .where('flow_type', 'expense')
+      return res.status(200).json(expenses)
     } catch (err) {
       return res.status(501).json({ message: 'Ocorreu um erro ao buscar as receitas' })
     }
@@ -16,10 +16,10 @@ export default class IncomeController {
   static async find (req, res) {
     try {
       const { id } = req.params
-      const incomes = await CashFlow.query()
+      const expense = await CashFlow.query()
                                     .where('user_id', req.userId).findById(id)
-                                    .where('flow_type', 'income')
-      return res.status(200).json(incomes || {})
+                                    .where('flow_type', 'expense')
+      return res.status(200).json(expense || {})
     } catch (err) {
       return res.status(501).json({ message: 'Ocorreu um erro ao buscar uma receita' })
     }
@@ -41,15 +41,15 @@ export default class IncomeController {
 
       if(validator.hasError()) return res.status(400).json({ error: validator.errors })
 
-      const income = await CashFlow.query().insert({
+      const expense = await CashFlow.query().insert({
         description,
         value, user_id,
         category_id,
         date,
-        flow_type: 'income'
+        flow_type: 'expense'
        })
 
-      return res.status(201).json(income)
+      return res.status(201).json(expense)
 
     } catch (err) {
       return res.status(501).json({ error: { message: 'Ocorreu um erro ao cadastrar a receita' } })
@@ -72,18 +72,18 @@ export default class IncomeController {
 
       if(validator.hasError()) return res.status(400).json({ error: validator.errors })
       
-      const incomeUpdated = await CashFlow.query()
+      const expenseUpdated = await CashFlow.query()
                                           .where('user_id', req.userId)
-                                          .where('flow_type', 'income')
+                                          .where('flow_type', 'expense')
                                           .patchAndFetchById(id, {
         description,
         value,
         category_id,
         date,
-        flow_type: 'income'
+        flow_type: 'expense'
       })
 
-      return res.status(200).json(incomeUpdated)
+      return res.status(200).json(expenseUpdated)
 
     } catch (err) {
       return res.status(501).json({ error: { message: 'Ocorreu um erro ao atualizar a receita' } })
@@ -96,7 +96,7 @@ export default class IncomeController {
 
       const result = await CashFlow.query()
                                    .where('user_id', req.userId)
-                                   .where('flow_type', 'income')
+                                   .where('flow_type', 'expense')
                                    .findById(id)
                                    .delete()
       

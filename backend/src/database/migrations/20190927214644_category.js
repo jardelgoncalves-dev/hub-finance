@@ -3,9 +3,7 @@ exports.up = function(knex) {
   return knex.schema.createTable('categories', table => {
     table.increments()
     table.string('name')
-    table.boolean('income')
-    table.boolean('expense')
-    table.timestamps()
+    table.enu('flow_type', ['income', 'expense', 'both'])
   })
 };
 
