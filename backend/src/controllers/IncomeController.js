@@ -120,7 +120,7 @@ export default class IncomeController {
   
       if(validator.hasError()) return res.status(400).json({ error: validator.errors })
   
-      const expenses = await CashFlow.query()
+      const incomes = await CashFlow.query()
                                      .select('month')
                                      .sum({ total: 'value' })
                                      .where({ user_id })
@@ -128,7 +128,7 @@ export default class IncomeController {
                                      .whereRaw('EXTRACT(year FROM date) = ?', year)
                                      .orderByRaw('EXTRACT(month FROM date) ASC')
                                      .groupBy('month', 'date')
-      return res.status(200).json(expenses)
+      return res.status(200).json(incomes)
     } catch (err) {
       return res.status(501).json({ error: { message: 'Ocorreu um erro ao buscar as despesa por periodo' } })
     }
