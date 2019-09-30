@@ -4,6 +4,8 @@ import bg from '../../assets/bg_big.svg'
 import small from '../../assets/bg_small.svg'
 
 export const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap');
+
   * {
     margin: 0;
     padding: 0;
@@ -27,7 +29,7 @@ export const GlobalStyle = createGlobalStyle`
   body,
   input,
   button {
-    font-family: sans-serif;
+    font-family: 'Lato', sans-serif;
   }
 
   h3 {
