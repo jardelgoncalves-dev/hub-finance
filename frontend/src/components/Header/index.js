@@ -63,8 +63,8 @@ Header.propTypes = {
   linksPrivate: PropTypes.array,
   linksPublic: PropTypes.array,
   flagPrivate: PropTypes.bool,
-  logo: PropTypes.object,
-  buttons: PropTypes.object
+  logo: PropTypes.string,
+  buttons: PropTypes.array
 }
 
 Header.defaultProps = {
