@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Provider } from 'react-redux';
+import Routes from './routes'
+import store from './store'
 
-class App extends Component {
-  render () {
-    return (
-      <div className="App">
-        <h1>Hello</h1>
-      </div>
-    )
-  }
-}
+import { GlobalStyle } from './components/GlobalStyle'
+
+const App = () => (
+  <Provider store={store}>
+    <Routes />
+    <GlobalStyle />
+  </Provider>
+)
 
 export default App;
