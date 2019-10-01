@@ -8,7 +8,8 @@ export default class CashFlow extends Model {
 
   $beforeInsert() {
     this.date = new Date(this.date)
-    this.month = this.date.toLocaleString('pt-BR', { month: 'long' }).toUpperCase()
+    const monthWithZero = this.date.getMonth() < 9 ? `0${this.date.getMonth() + 1}` : this.date.getMonth() + 1
+    this.month = monthWithZero + '/' + this.date.getFullYear()
   }
 
   static get jsonSchema () {
