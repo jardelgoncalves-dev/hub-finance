@@ -1,14 +1,62 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux'
 
 import Header from '../../components/Header'
-import Avatar from '../../components/Avatar'
 import Container from '../../components/Container'
 import Input from '../../components/Input'
 import Button from '../../components/Button'
+import Alert from '../../components/Alert'
 import logo from '../../assets/logo_white.svg'
-import userIcon from '../../assets/user.svg'
+
+import { isEmail, isRequired } from '../../util/validator'
+import * as UserActions from '../../store/actions/user'
 
 class Login extends Component {
+
+  state = {
+    email: '',
+    password: '',
+    error_email: '',
+    error_password: '',
+    error: '',
+    stop_request: false
+  }
+
+  componentDidMount () {
+    this.props.logout()
+  }
+
+  handleValidateField = () => {
+    this.setState({ error_email: '', error_password: '', stop_request: false })
+    if (!isEmail(this.state.email)){
+      this.setState({ error_email: 'Email inválido', stop_request: true })
+    }
+    if (!isRequired(this.state.password) ) {
+      this.setState({ error_password: 'Este campo é obrigatório', stop_request: true })
+    }
+    if (!isRequired(this.state.email)){
+      this.setState({ error_email: 'Este campo é obrigatório', stop_request: true })
+    }
+  }
+
+  handleSubmit = async () => {
+    await this.handleValidateField()
+    if (!this.state.stop_request) {
+      const { email, password } = this.state
+      const response = await this.props.login({ email, password })
+      if (response.status === 200) {
+        this.setState({ error: '' })
+        this.props.history.push('/home')
+      } else {
+        if(response.data.error && response.data.error.message) {
+          this.setState({ error: response.data.error.message })
+        }
+      }
+    }
+  }
+
+
   render () {
     return (
       <div>
@@ -16,15 +64,10 @@ class Login extends Component {
           logo={logo}
           links={[
             { url: '/', name: 'Login' },
-            { url: '/', name: 'Cadastro' },
+            { url: '/cadastro', name: 'Cadastro' },
           ]}
-          buttons={[<Button key="1" small white>Sair</Button>]}
         >
           <img src={logo} alt="Logo" />
-          <Avatar
-            image={userIcon}
-            text="Jardel Gonçalves"
-          />
         </Header>
         <Container center column>
           <h3>Para continuar, faça login</h3>
@@ -32,9 +75,21 @@ class Login extends Component {
             width: '600px',
             marginTop: '16px'
           }}>
-            <Input placeholder="Email" />
-            <Input placeholder="Password" />
-            <Button>Login</Button>
+            { this.state.error.length !== 0 && <Alert danger>{ this.state.error }</Alert> }
+            <Input
+              placeholder="Email"
+              onChange={(e) => this.setState({ email: e.target.value })}
+              errorMessage={this.state.error_email}
+              style={{ marginBottom: '32px', marginTop: '32px' }}
+            />
+            <Input
+              placeholder="Password"
+              type="password"
+              onChange={(e) => this.setState({ password: e.target.value })}
+              errorMessage={this.state.error_password}
+              style={{ marginBottom: '32px' }}
+            />
+            <Button onClick={this.handleSubmit}>Login</Button>
           </div>
         </Container>
       </div>
@@ -42,4 +97,13 @@ class Login extends Component {
   }
 }
 
-export default Login;
+
+const mapStateToProps = state => ({
+  auth: state.user.isAuthenticated,
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(UserActions, dispatch);
+
+
+export default  connect(mapStateToProps, mapDispatchToProps)(Login) ;
