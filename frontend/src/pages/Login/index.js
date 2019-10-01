@@ -40,6 +40,12 @@ class Login extends Component {
     }
   }
 
+  handleInputChange = (name, value) => {
+    this.setState({
+      [name]: value
+    });
+  }
+
   handleSubmit = async () => {
     await this.handleValidateField()
     if (!this.state.stop_request) {
@@ -78,14 +84,14 @@ class Login extends Component {
             { this.state.error.length !== 0 && <Alert danger>{ this.state.error }</Alert> }
             <Input
               placeholder="Email"
-              onChange={(e) => this.setState({ email: e.target.value })}
+              onChange={(event) => this.handleInputChange('email', event.target.value)}
               errorMessage={this.state.error_email}
               style={{ marginBottom: '32px', marginTop: '32px' }}
             />
             <Input
               placeholder="Password"
               type="password"
-              onChange={(e) => this.setState({ password: e.target.value })}
+              onChange={(event) => this.handleInputChange('password', event.target.value)}
               errorMessage={this.state.error_password}
               style={{ marginBottom: '32px' }}
             />
