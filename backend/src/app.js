@@ -1,6 +1,7 @@
 import express from 'express'
 import knex from 'knex'
 import { Model } from 'objection'
+import cors from 'cors'
 
 import routes from './routes'
 import knexConfig from '../knexfile'
@@ -13,6 +14,7 @@ Model.knex(Knex)
 
 // middlewares
 app.use(express.json())
+app.use(cors())
 
 // routes
 app.use(routes)
