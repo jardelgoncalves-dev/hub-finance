@@ -96,7 +96,7 @@ export const CardResume = ({ image, textValueColor, titleColor, title, textValue
 
 
 CardResume.propTypes = {
-  image: PropTypes.object.isRequired,
+  image: PropTypes.string.isRequired,
   textValueColor: PropTypes.string,
   titleColor: PropTypes.string,
   title: PropTypes.string.isRequired,

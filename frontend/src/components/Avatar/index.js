@@ -29,7 +29,7 @@ const Avatar = ({ width, height, image, text, colorText }) => (
 Avatar.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string,
-  image: PropTypes.object.isRequired,
+  image: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   colorText: PropTypes.string
 }
@@ -37,7 +37,8 @@ Avatar.propTypes = {
 Avatar.defaultProps = {
   width: '35px',
   height: '35px',
-  colorText: '#FFF'
+  colorText: '#FFF',
+  text: '----'
 }
 
 export default Avatar

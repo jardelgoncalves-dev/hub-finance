@@ -53,7 +53,7 @@ export const Modal = ({ title, onClose, showFlag, titleColor }) => (
             border: '1px solid #CCCCCC',
             boxShadow: 'none',
             width: '100%',
-            margin: 0
+            margin: 0,
           }}
           placeholder="Breve descrição"
         />
