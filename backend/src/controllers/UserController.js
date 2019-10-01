@@ -27,7 +27,7 @@ export default class UserController {
       const user = await User.query().insert({ name, email, password })
       const token = jwt.sign({ id: user.id }, process.env.APP_SECRET)
   
-      return res.status(201).json({ token })
+      return res.status(201).json({ token, user })
     } catch (err) {
       return res.status(501).json({ error: { message: 'Ocorreu um erro ao cadastrar o usuario' } })
     }

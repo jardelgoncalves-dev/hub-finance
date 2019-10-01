@@ -29,7 +29,7 @@ export default class SessionController {
       }
 
       const token = jwt.sign({ id: user[0].id }, process.env.APP_SECRET)
-      return res.status(200).json({ token })
+      return res.status(200).json({ token, user: user[0] })
 
     } catch (err) {
       console.log(err)
