@@ -5,6 +5,7 @@ import SessionController from './controllers/SessionController'
 import IncomeController from './controllers/IncomeController'
 import ExpenseController from './controllers/ExpenseController'
 import CategoryController from './controllers/CategoryController'
+import CashFlowController from './controllers/CashFlowController'
 
 import AuthMiddleware from './middlewares/Auth'
 
@@ -32,6 +33,8 @@ routes.delete('/expenses/:id', ExpenseController.delete)
 routes.get('/expenses/total/:year/year', ExpenseController.totalByYear)
 routes.get('/expenses/total/categories', ExpenseController.totalByCategories)
 routes.get('/expenses/:year/:month/period', ExpenseController.findByYearAndMonth)
+
+routes.get('/cashflow/balance', CashFlowController.index)
 
 
 export default routes
