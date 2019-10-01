@@ -164,10 +164,10 @@ export default class ExpenseController {
     try {
       const user_id = req.userId
       const expenses = await CashFlow.query()
-                                     .select('categories.id', 'categories.name')
+                                     .select('categories.name')
                                      .sum({ total: 'cash_flows.value' })
                                      .leftJoin('categories', 'categories.id', 'cash_flows.category_id')
-                                     .leftJoin('users', 'cash_flows.user_id', user_id)
+                                     .where('user_id', user_id)
                                      .where('cash_flows.flow_type', 'expense')
                                      .groupBy('categories.name', 'categories.id')
       return res.status(200).json(expenses)
