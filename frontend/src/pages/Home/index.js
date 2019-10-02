@@ -184,7 +184,7 @@ class Home extends Component {
             />
           )) }
           <div style={{ width: '100%', alignItems: 'left', marginTop: '20px'}}>
-            <a href="/" style={{
+            <a href="/home/listar" style={{
               fontWeight: "bold",
               fontSize: '16px',
               color: '#F2691B'
@@ -201,7 +201,7 @@ class Home extends Component {
             <Action
                 text="Adicionar despesa"
                 style={{ backgroundColor: "#E63636" }}
-                onClick={() => this.toggleModalExpense()}
+                onClick={() => this.props.history.push('/home/add_expense')}
               >
               <TrendingDownSVG />
             </Action>
