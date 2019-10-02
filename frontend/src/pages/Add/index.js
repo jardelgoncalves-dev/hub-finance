@@ -33,12 +33,20 @@ class AddExpense extends Component {
     error_value: '',
     error_description: '',
     error_category: '',
-
-    stop_request: false
+    stop_request: false,
+    flow: ''
   }
 
   componentDidMount () {
     this.getCategories()
+    if (
+        this.props.match.params.flow === 'expense' ||
+        this.props.match.params.flow === 'income'
+      ) {
+        this.setState({ flow: this.props.match.params.flow })
+      } else {
+        this.props.history.push('/error')
+      }
   }
 
   handleInputChange = (name, value) => {
@@ -57,9 +65,9 @@ class AddExpense extends Component {
         entry_category: category_id
       } = this.state
 
-      api.post('/expenses', { date, description, value: parseFloat(value), category_id })
+      api.post(`/${this.state.flow}s`, { date, description, value: parseFloat(value), category_id })
         .then(response => {
-          NotificationManager.success(null, 'A despesa foi cadastrada com sucesso');
+          NotificationManager.success(null, 'O lançamento foi cadastrada com sucesso');
           this.setState({ 
             entry_date: '',
             entry_value: '',
@@ -78,7 +86,7 @@ class AddExpense extends Component {
 
     let categories = []
     response.data.forEach(category => {
-      if (category.flow_type === 'expense') {
+      if (category.flow_type === this.state.flow) {
         categories.push({ value: category.id, label: category.name, type: category.flow_type })
       }
     })
@@ -127,7 +135,11 @@ class AddExpense extends Component {
           />
         </Header>
         <Container center column>
-          <h3 style={{ color: '#FFF', marginBottom: '20px' }}>Adicionar Despesa</h3>
+          { this.state.flow === 'expense' ? (
+            <h3 style={{ color: '#FFF', marginBottom: '20px' }}>Adicionar Despesa</h3>
+          ) : (
+            <h3 style={{ color: '#FFF', marginBottom: '20px' }}>Adicionar Receita</h3>
+          )}
           <div style={{
             display: 'flex',
             flexDirection: 'column',
