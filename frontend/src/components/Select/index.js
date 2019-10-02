@@ -28,10 +28,11 @@ const formatGroupLabel = data => (
   </div>
 );
 
-export default ({ options, onChange }) => (
+export default ({ options, onChange, placeholder }) => (
   <Select
     options={options}
     formatGroupLabel={formatGroupLabel}
     onChange={onChange}
+    placeholder={placeholder}
   />
 );
