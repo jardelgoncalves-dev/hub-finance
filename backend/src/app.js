@@ -13,8 +13,8 @@ const Knex = knex(knexConfig[process.env.NODE_ENV || 'development'])
 Model.knex(Knex)
 
 // middlewares
-app.use(express.json())
 app.use(cors())
+app.use(express.json())
 
 // routes
 app.use(routes)

@@ -86,7 +86,7 @@ class AddExpense extends Component {
 
     let categories = []
     response.data.forEach(category => {
-      if (category.flow_type === this.state.flow) {
+      if (category.flow_type === this.state.flow || category.flow_type === 'both') {
         categories.push({ value: category.id, label: category.name, type: category.flow_type })
       }
     })

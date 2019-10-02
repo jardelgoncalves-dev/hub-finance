@@ -29,6 +29,7 @@ export default class UserController {
   
       return res.status(201).json({ token, user })
     } catch (err) {
+      console.log(err)
       return res.status(501).json({ error: { message: 'Ocorreu um erro ao cadastrar o usuario' } })
     }
   }

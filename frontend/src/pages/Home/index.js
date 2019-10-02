@@ -120,7 +120,7 @@ class Home extends Component {
           </Row>
           <Row>
             <CardChart title="Despesas x Receitas">
-              { this.state.chartLineData.length > 2 ? (
+              { this.state.chartLineData.length > 1 ? (
                 <Chart
                   width={'600px'}
                   height={'400px'}
