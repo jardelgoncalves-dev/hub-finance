@@ -15,6 +15,7 @@ export default class Category extends Model {
         id: { type: 'integer' },
         name: { type: 'string', minLength: 1, maxLength: 255 },
         flow_type: { type: 'string' },
+        color: { type: 'string' }
       }
     }
   }

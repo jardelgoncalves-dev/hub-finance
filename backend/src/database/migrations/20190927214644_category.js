@@ -4,6 +4,7 @@ exports.up = function(knex) {
     table.increments()
     table.string('name')
     table.enu('flow_type', ['income', 'expense', 'both'])
+    table.string('color')
   })
 };
 
