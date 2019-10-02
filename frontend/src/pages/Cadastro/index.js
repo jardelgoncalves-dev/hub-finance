@@ -3,14 +3,12 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux'
 
 import Header from '../../components/Header'
-import Avatar from '../../components/Avatar'
 import Container from '../../components/Container'
 import Input from '../../components/Input'
 import Button from '../../components/Button'
 import Alert from '../../components/Alert'
 
 import logo from '../../assets/logo_white.svg'
-import userIcon from '../../assets/user.svg'
 
 import { isEmail, isRequired } from '../../util/validator'
 import * as UserActions from '../../store/actions/user'
@@ -82,13 +80,8 @@ class Cadastro extends Component {
             { url: '/', name: 'Login' },
             { url: '/cadastro', name: 'Cadastro' },
           ]}
-          buttons={[<Button key="1" small white>Sair</Button>]}
         >
           <img src={logo} alt="Logo" />
-          <Avatar
-            image={userIcon}
-            text="Jardel Gonçalves"
-          />
         </Header>
         <Container center column>
           <h3>Para começar usar, realize o cadastro</h3>
