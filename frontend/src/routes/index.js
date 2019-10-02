@@ -5,9 +5,9 @@ import { ConnectedRouter } from 'connected-react-router'
 import Login from '../pages/Login';
 import Cadastro from '../pages/Cadastro';
 import Home from '../pages/Home';
-import AddIncome from '../pages/AddIncome';
-import AddExpense from '../pages/AddExpense';
+import Add from '../pages/Add';
 import Listar from '../pages/Listar';
+import NotFound from '../pages/NotFound';
 
 import history from './history'
 import ProtectedRoute from '../ProtectedRoute'
@@ -18,9 +18,9 @@ const Routes = () => (
       <Route exact path="/" component={Login} />
       <Route path="/cadastro" component={Cadastro} />
       <Route exact path="/home" component={ProtectedRoute(Home)} />
-      <Route path="/home/add_income" component={ProtectedRoute(AddIncome)} />
-      <Route path="/home/add_expense" component={ProtectedRoute(AddExpense)} />
+      <Route path="/home/add/:flow" component={ProtectedRoute(Add)} />
       <Route path="/home/listar" component={ProtectedRoute(Listar)} />
+      <Route path="*" component={NotFound} />
     </Switch> 
   </ConnectedRouter>
 )
