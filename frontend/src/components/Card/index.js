@@ -99,8 +99,7 @@ CardResume.propTypes = {
   image: PropTypes.string.isRequired,
   textValueColor: PropTypes.string,
   titleColor: PropTypes.string,
-  title: PropTypes.string.isRequired,
-  textValue: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired
 }
 
 CardResume.defaultProps = {
@@ -124,18 +123,22 @@ CardChart.defaultProps = {
   titleColor: '#F2691B'
 }
 
-export const CardExpense = () => (
+export const CardExpense = ({ value, category, description, color }) => (
   <StyleExpense dark>
-    <div className="square" style={{ backgroundColor: '#71C355' }}>
-      <span>R$ 20000</span>
+    <div className="square" style={{ backgroundColor: color }}>
+      <span>R$ {value}</span>
     </div>
     <div>
-      <span className="category" style={{ color: '#71C355' }}>
-        Educação
+      <span className="category" style={{ color: color }}>
+        { category }
       </span>
       <span className="description">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exe
+      {description}
       </span>
     </div>
   </StyleExpense>
 )
+
+CardExpense.defaultProps = {
+  color: '#71C355'
+}
