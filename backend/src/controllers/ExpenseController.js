@@ -176,4 +176,20 @@ export default class ExpenseController {
       return res.status(501).json({ error: { message: 'Ocorreu um erro ao buscar as despesa por periodo' } })
     }
   }
+
+  static async limit (req, res) {
+    const paginate = req.params.limit || 3
+    try {
+      const expenses = await CashFlow.query()
+                              .where('user_id', req.userId)
+                              .where('flow_type', 'expense')
+                              .orderBy('id', 'DESC')
+                              .limit(paginate)
+                              .eager('categories')
+      return res.status(200).json(expenses)
+    } catch (err) {
+      console.log(err)
+      return res.status(501).json({ message: 'Ocorreu um erro ao buscar as despesas' })
+    }
+  }
 }
