@@ -13,7 +13,6 @@ import { CardResume, CardChart, CardExpense } from '../../components/Card'
 import Row from '../../components/Row'
 import Spinner from '../../components/Spinner'
 import HasNoData from '../../components/HasNoData'
-import { Modal } from '../../components/Modal'
 import { TrendingDownSVG, TrendingUpSVG } from '../../components/Icons'
 
 import logo from '../../assets/logo_white.svg'
@@ -28,23 +27,18 @@ import 'react-tiny-fab/dist/styles.css';
 
 class Home extends Component {
   state = {
-    modalAddIncome: false,
-    modalAddExpense: false,
     chartLineData: [],
     chartByCategoryData: [],
+    resume_income: 0,
+    resume_expense: 0,
+    last_expense: [],
   }
 
   componentDidMount() {
     this.getBalance()
     this.getExpenseByCategory()
-  }
-
-  toggleModalExpense = () => {
-    this.setState({ modalAddIncome: false, modalAddExpense: !this.state.modalAddExpense })
-  }
-
-  toggleModalIncome = () => {
-    this.setState({ modalAddIncome: !this.state.modalAddIncome, modalAddExpense: false })
+    this.getResume()
+    this.getLastExpense()
   }
 
   getBalance = async () => {
@@ -67,6 +61,21 @@ class Home extends Component {
       data.push([category.name, parseFloat(category.total) || 0])
     })
     this.setState({ chartByCategoryData: data })
+  }
+
+  getResume = async () => {
+    const response = await api.get('/cashflow/balance/flowtype')
+    this.setState({
+      resume_income: response.data.income || 0,
+      resume_expense: response.data.expense || 0
+    })
+  }
+
+  getLastExpense = async () => {
+    const response = await api.get('/expenses/paginate/3')
+    this.setState({
+      last_expense: response.data
+    })
   }
 
   render () {
@@ -99,13 +108,13 @@ class Home extends Component {
             <CardResume
               image={trendingUp}
               title="Total em receitas"
-              textValue="4000"
+              textValue={this.state.resume_income}
               textValueColor="#1E81CE"
             />
             <CardResume
               image={trendingDown}
               title="Total em despesas"
-              textValue="2000"
+              textValue={this.state.resume_expense}
               textValueColor="#E63636"
             />
           </Row>
@@ -160,9 +169,20 @@ class Home extends Component {
               Despesas Recentes
             </h3>
           </div>
-          <CardExpense />
-          <CardExpense />
-          <CardExpense />
+          { !this.state.last_expense.length && (
+          <p style={{ color: '#6f6f6f', marginBottom: '50px', marginTop: '50px' }}>
+            Você não possui despesas cadastradas
+          </p>
+          )}
+          { this.state.last_expense.map(expense => (
+            <CardExpense
+              key={expense.id}
+              value={expense.value}
+              color={expense.categories.color}
+              category={expense.categories.name}
+              description={expense.description}
+            />
+          )) }
           <div style={{ width: '100%', alignItems: 'left', marginTop: '20px'}}>
             <a href="/" style={{
               fontWeight: "bold",
@@ -188,25 +208,12 @@ class Home extends Component {
             <Action
               text="Adicionar receita"
               style={{ backgroundColor: "#1E81CE" }}
-              onClick={() => this.toggleModalIncome()}
+              onClick={() => this.props.history.push('/home/add_income')}
             >
               <TrendingUpSVG />
             </Action>
           </Fab>
         </Container>
-        <Modal
-          title="Nova Receita"
-          titleColor="#F2691B"
-          showFlag={this.state.modalAddIncome}
-          onClose={this.toggleModalIncome}
-        />
-
-        <Modal
-          title="Nova Despesa"
-          titleColor="#F2691B"
-          showFlag={this.state.modalAddExpense}
-          onClose={this.toggleModalExpense}
-        />
         <ChangeBackground />
       </div>
     )
