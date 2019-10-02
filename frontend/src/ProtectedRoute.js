@@ -35,33 +35,3 @@ export default function (ComponentPrivate) {
 
   return  connect(mapStateToProps, mapDispatchToProps)(ProtectedRoute) ;
 }
-
-
-
-
-
-
-
-// const ProtectedRoute = ({ component: Component,  ...rest }) => (
-//   <Route
-//     {...rest}
-//     render={props => {
-//       alert(JSON.stringify(props))
-//       return props.auth ? (
-//         <Component {...props} />
-//       ) : (
-//         <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-//       )
-//     }
-//     }
-//   />
-// );
-
-// const mapStateToProps = state => ({
-//   auth: state.user.isAuthenticated
-// });
-
-// const mapDispatchToProps = dispatch =>
-//   bindActionCreators(UserActions, dispatch);
-
-// export default  connect(mapStateToProps, mapDispatchToProps)(ProtectedRoute) ;
