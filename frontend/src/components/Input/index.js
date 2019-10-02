@@ -27,14 +27,16 @@ const StyleInput = styled.div`
   }
 `;
 
-const Input = ({ placeholder, type, onChange, errorMessage, style }) => (
+const Input = ({ placeholder, type, onChange, errorMessage, style, styleInput, defaultValue }) => (
   <StyleInput
     style={style}
   >
     <input
       placeholder={placeholder}
       type={type}
+      style={styleInput}
       onChange={onChange}
+      value={defaultValue}
     />
     { errorMessage && <small className="errorMessage">{ errorMessage }</small> }
     
