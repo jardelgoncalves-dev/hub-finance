@@ -201,14 +201,14 @@ class Home extends Component {
             <Action
                 text="Adicionar despesa"
                 style={{ backgroundColor: "#E63636" }}
-                onClick={() => this.props.history.push('/home/add_expense')}
+                onClick={() => this.props.history.push('/home/add/expense')}
               >
               <TrendingDownSVG />
             </Action>
             <Action
               text="Adicionar receita"
               style={{ backgroundColor: "#1E81CE" }}
-              onClick={() => this.props.history.push('/home/add_income')}
+              onClick={() => this.props.history.push('/home/add/income')}
             >
               <TrendingUpSVG />
             </Action>
