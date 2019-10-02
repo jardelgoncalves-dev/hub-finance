@@ -5,5 +5,9 @@ export const isEmail = (email) => {
 }
 
 export const isRequired = (field) => {
-  return field !== "" && field !== undefined && field !== null
+  return field !== undefined && field !== null && String(field).trim() !== ""
+}
+
+export const isNumber = (field) => {
+  return !isNaN(field) && String(field).trim() !== "" && field !== null
 }
