@@ -1,4 +1,5 @@
 import User from '../models/User'
+import UserService from '../services/UserService'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
@@ -21,16 +22,11 @@ export default class UserController {
   
       if (validator.hasError()) return res.status(400).json({ error: validator.errors })
   
-      const checkEmail = await User.query().where('email', email).limit(1)
-      if (checkEmail.length) return res.status(400).json({ error: { email: ['Este email já está sendo usado!'] } })
-  
-      const user = await User.query().insert({ name, email, password })
-      const token = jwt.sign({ id: user.id }, process.env.APP_SECRET)
-  
-      return res.status(201).json({ token, user })
+      const response = await UserService.store({ name, email, password })
+      return res.status(response.status).json(response.data)
+      
     } catch (err) {
-      console.log(err)
-      return res.status(501).json({ error: { message: 'Ocorreu um erro ao cadastrar o usuario' } })
+      return res.status(422).json({ error: { message: 'Ocorreu um erro ao cadastrar o usuario' } })
     }
   }
 }

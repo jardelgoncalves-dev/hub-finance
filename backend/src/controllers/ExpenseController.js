@@ -1,27 +1,24 @@
-import CashFlow from '../models/CashFlow'
+import IncomeAndExpenseService from '../services/IncomeAndExpenseService'
 import Validator from '../helpers/validator'
 
 export default class ExpenseController {
   static async index (req, res) {
     try {
-      const expenses = await CashFlow.query()
-                              .where('user_id', req.userId)
-                              .where('flow_type', 'expense')
-      return res.status(200).json(expenses)
+      const response = await IncomeAndExpenseService.index(req.userId, 'expense')
+      return res.status(response.status).json(response.data)
     } catch (err) {
-      return res.status(501).json({ message: 'Ocorreu um erro ao buscar as despesas' })
+      return res.status(422).json({ message: 'Ocorreu um erro ao buscar as despesas' })
     }
   }
 
   static async find (req, res) {
     try {
       const { id } = req.params
-      const expense = await CashFlow.query()
-                                    .where('user_id', req.userId).findById(id)
-                                    .where('flow_type', 'expense')
-      return res.status(200).json(expense || {})
+
+      const response = await IncomeAndExpenseService.find(id, req.userId, 'expense')
+      return res.status(response.status).json(response.data)
     } catch (err) {
-      return res.status(501).json({ message: 'Ocorreu um erro ao buscar uma despesa' })
+      return res.status(422).json({ message: 'Ocorreu um erro ao buscar uma despesa' })
     }
   }
 
@@ -41,18 +38,18 @@ export default class ExpenseController {
 
       if(validator.hasError()) return res.status(400).json({ error: validator.errors })
 
-      const expense = await CashFlow.query().insert({
+      const response = await IncomeAndExpenseService.store({
         description,
         value, user_id,
         category_id,
         date,
         flow_type: 'expense'
-       })
+      })
 
-      return res.status(201).json(expense)
+      return res.status(response.status).json(response.data)
 
     } catch (err) {
-      return res.status(501).json({ error: { message: 'Ocorreu um erro ao cadastrar a despesa' } })
+      return res.status(422).json({ error: { message: 'Ocorreu um erro ao cadastrar a despesa' } })
     }
   }
 
@@ -71,22 +68,17 @@ export default class ExpenseController {
       })
 
       if(validator.hasError()) return res.status(400).json({ error: validator.errors })
-      
-      const expenseUpdated = await CashFlow.query()
-                                          .where('user_id', req.userId)
-                                          .where('flow_type', 'expense')
-                                          .patchAndFetchById(id, {
+
+      const response = await IncomeAndExpenseService.update({
         description,
         value,
         category_id,
         date,
         flow_type: 'expense'
-      })
-
-      return res.status(200).json(expenseUpdated)
-
+      }, id, req.userId, 'expense')
+      return res.status(response.status).json(response.data)
     } catch (err) {
-      return res.status(501).json({ error: { message: 'Ocorreu um erro ao atualizar a despesa' } })
+      return res.status(422).json({ error: { message: 'Ocorreu um erro ao atualizar a despesa' } })
     }
   }
 
@@ -94,17 +86,12 @@ export default class ExpenseController {
     try {
       const { id } = req.params
 
-      const result = await CashFlow.query()
-                                   .where('user_id', req.userId)
-                                   .where('flow_type', 'expense')
-                                   .findById(id)
-                                   .delete()
-      
-      if (result) return res.status(204).send()
-      if (!result) return res.status(404).send({ error: 'Receita não encontrada' })
+      const response = await IncomeAndExpenseService.delete(id, req.userId, 'expense')
+      if(response.status === 204) return res.status(response.status).send()
+      return res.status(response.status).json(response.data)
 
     } catch (err) {
-      return res.status(501).json({ error: { message: 'Ocorreu um erro ao remover a despesa' } })
+      return res.status(422).json({ error: { message: 'Ocorreu um erro ao remover a despesa' } })
     }
   }
 
@@ -120,17 +107,11 @@ export default class ExpenseController {
   
       if(validator.hasError()) return res.status(400).json({ error: validator.errors })
   
-      const expenses = await CashFlow.query()
-                                     .select('month')
-                                     .sum({ total: 'value' })
-                                     .where({ user_id })
-                                     .where('flow_type', 'expense')
-                                     .whereRaw('EXTRACT(year FROM date) = ?', year)
-                                     .orderByRaw('EXTRACT(month FROM date) ASC')
-                                     .groupBy('month', 'date')
-      return res.status(200).json(expenses)
+      const response = await IncomeAndExpenseService.totalByYear(year, user_id, 'expense')
+      return res.status(response.status).json(response.data)
+  
     } catch (err) {
-      return res.status(501).json({ error: { message: 'Ocorreu um erro ao buscar as despesa por periodo' } })
+      return res.status(422).json({ error: { message: 'Ocorreu um erro ao buscar as despesa por periodo' } })
     }
   }
 
@@ -146,50 +127,32 @@ export default class ExpenseController {
       })
   
       if(validator.hasError()) return res.status(400).json({ error: validator.errors })
-  
-      const expenses = await CashFlow.query()
-                                     .where({ user_id })
-                                     .where('flow_type', 'expense')
-                                     .whereRaw('EXTRACT(year FROM date) = ?', year)
-                                     .whereRaw('EXTRACT(month FROM date) = ?', month)
-                                     .orderBy('id', 'DESC')
-                                     .eager('categories')
-      return res.status(200).json(expenses)
+
+      const response = await IncomeAndExpenseService.findByYearAndMonth(year, month, user_id, 'expense')
+      return res.status(response.status).json(response.data)
     } catch (err) {
-      return res.status(501).json({ error: { message: 'Ocorreu um erro ao buscar as despesa por periodo' } })
+      return res.status(422).json({ error: { message: 'Ocorreu um erro ao buscar as despesa por periodo' } })
     }
   }
 
   static async totalByCategories (req, res) {
     try {
       const user_id = req.userId
-      const expenses = await CashFlow.query()
-                                     .select('categories.name')
-                                     .sum({ total: 'cash_flows.value' })
-                                     .leftJoin('categories', 'categories.id', 'cash_flows.category_id')
-                                     .where('user_id', user_id)
-                                     .where('cash_flows.flow_type', 'expense')
-                                     .groupBy('categories.name', 'categories.id')
-      return res.status(200).json(expenses)
+
+      const response = await IncomeAndExpenseService.totalByCategories(user_id, 'expense')
+      return res.status(response.status).json(response.data)
     } catch (err) {
-      console.log(err)
-      return res.status(501).json({ error: { message: 'Ocorreu um erro ao buscar as despesa por periodo' } })
+      return res.status(422).json({ error: { message: 'Ocorreu um erro ao buscar as despesa por periodo' } })
     }
   }
 
   static async limit (req, res) {
     const paginate = req.params.limit || 3
     try {
-      const expenses = await CashFlow.query()
-                              .where('user_id', req.userId)
-                              .where('flow_type', 'expense')
-                              .orderBy('id', 'DESC')
-                              .limit(paginate)
-                              .eager('categories')
-      return res.status(200).json(expenses)
+      const response = await IncomeAndExpenseService.limit(paginate, req.userId, 'expense')
+      return res.status(response.status).json(response.data)
     } catch (err) {
-      console.log(err)
-      return res.status(501).json({ message: 'Ocorreu um erro ao buscar as despesas' })
+      return res.status(422).json({ message: 'Ocorreu um erro ao buscar as despesas' })
     }
   }
 }
