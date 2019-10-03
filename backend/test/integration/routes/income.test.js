@@ -231,7 +231,7 @@ describe('Routes Income', () => {
         .delete('/incomes/250')
         .set('authorization', `Bearer ${ token } `)
         .end((err, res) => {
-          expect(res.body.error).to.be.a('string')
+          expect(res.body.error).to.be.an('object')
           expect(res.status).to.be.eql(404)
           done(err)
         })

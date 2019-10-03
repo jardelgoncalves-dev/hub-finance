@@ -54,10 +54,10 @@ describe('Routes Flow Balance', () => {
       })
   })
 
-  describe('Route GET /incomes', () => {
+  describe('Route GET /cashflow/balance', () => {
     it('should return an error when the token is not provided', done => {
       request
-        .get('/incomes')
+        .get('/cashflow/balance')
         .end((err, res) => {
           expect(res.body.error).to.be.a('string')
           expect(res.status).to.be.eql(401)
@@ -67,7 +67,7 @@ describe('Routes Flow Balance', () => {
 
     it('should return an error when the token is invalid', done => {
       request
-        .get('/incomes')
+        .get('/cashflow/balance')
         .set('authorization', 'Bearer weqnweq.eqw33434mpo3nf.ebipwewpe0er')
         .end((err, res) => {
           expect(res.body.error).to.be.a('string')
@@ -78,7 +78,7 @@ describe('Routes Flow Balance', () => {
 
     it('should return an error when the token is valid but the user is not in the database', done => {
       request
-        .get('/incomes')
+        .get('/cashflow/balance')
         .set('authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIzNDU2Nzg5MH0.GR7LXNTFGdDfGftnt77aDFxYVrm5MNQ16UogsqSGjvI')
         .end((err, res) => {
           expect(res.body.error).to.be.a('string')
@@ -103,7 +103,7 @@ describe('Routes Flow Balance', () => {
         .get('/cashflow/balance/flowtype')
         .set('authorization', `Bearer ${ token } `)
         .end((err, res) => {
-          expect(res.body).to.be.an('array')
+          expect(res.body).to.be.an('object')
           expect(res.status).to.be.eql(200)
           done(err)
         })
