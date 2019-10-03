@@ -1,12 +1,9 @@
 import axios from 'axios'
 import { getToken } from './auth'
-import dotenv from 'dotenv'
-dotenv.config({
-  path: '.env'
-})
+import config from '../config/config'
 
 const api = axios.create({
-  baseURL: `http://${process.env.IP_API}:3333/`
+  baseURL: `http://${config.IP_API}:3333/`
 })
 
 api.interceptors.request.use(async config => {
